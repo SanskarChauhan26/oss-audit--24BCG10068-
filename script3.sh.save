@@ -1,0 +1,50 @@
+
+#!/bin/bash
+# Script 3: Disk and Permission Auditor
+# Author: [Sanskar Prashad Tiwari] | Reg No: [24BCG10068]
+# Course: Open Source Software
+# Description: Loops through key system directories and reports
+# their size, owner, and permissions using a for loop
+
+DIRS=("/etc" "/var/log" "/home" "/usr/bin" "/tmp")
+
+
+echo " Directory Audit Report"
+
+
+# --- For loop through each directory ---
+for DIR in "${DIRS[@]}"; do
+    if [ -d "$DIR" ]; then
+        # Extracting permissions, owner and group using awk
+        PERMS=$(ls -ld $DIR | awk '{print $1}')
+        OWNER=$(ls -ld $DIR | awk '{print $3}')
+        GROUP=$(ls -ld $DIR | awk '{print $4}')
+        SIZE=$(du -sh $DIR 2>/dev/null | cut -f1)
+        echo "Directory : $DIR"
+        echo "Size      : $SIZE"
+        echo "Owner     : $OWNER | Group: $GROUP"
+        echo "Permission: $PERMS"
+        
+    else
+        echo "$DIR does not exist on this system"
+        
+    fi
+done
+
+# --- Checking Python's specific directory ---
+echo ""
+
+echo " Python Installation Check"
+
+PYTHON_DIR="/usr/lib/python3"
+if [ -d "$PYTHON_DIR" ]; then
+    PERMS=$(ls -ld $PYTHON_DIR | awk '{print $1}')
+    OWNER=$(ls -ld $PYTHON_DIR | awk '{print $3}')
+    echo "Python library directory found!"
+    echo "Location    : $PYTHON_DIR"
+    echo "Permissions : $PERMS"
+    echo "Owner       : $OWNER"
+else
+    echo "Python library directory not found."
+fi
+
